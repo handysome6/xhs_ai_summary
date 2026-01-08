@@ -1,0 +1,359 @@
+openapi: 3.0.3
+info:
+  title: XHS AI Summary API
+  description: Backend API for XHS content crawling and AI analysis
+  version: 1.0.0
+  contact:
+    name: XHS AI Summary
+
+servers:
+  - url: http://localhost:3000/api/v1
+    description: Local development server
+
+paths:
+  /crawl:
+    post:
+      summary: Crawl XHS post content
+      description: Extracts text and media URLs from a Xiaohongshu post
+      operationId: crawlPost
+      tags:
+        - Crawling
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CrawlRequest'
+      responses:
+        '200':
+          description: Successfully crawled post content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrawlResponse'
+        '400':
+          description: Invalid URL or request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Post not found or deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limited by XHS
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error during crawling
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /analyze:
+    post:
+      summary: Analyze post content with AI
+      description: Generates labels, summary, and group suggestion for post content
+      operationId: analyzePost
+      tags:
+        - AI Analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyzeRequest'
+      responses:
+        '200':
+          description: Successfully analyzed content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyzeResponse'
+        '400':
+          description: Invalid request (empty content)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: AI API rate limited
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error during analysis
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /health:
+    get:
+      summary: Health check
+      description: Returns API health status
+      operationId: healthCheck
+      tags:
+        - System
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  schemas:
+    CrawlRequest:
+      type: object
+      required:
+        - url
+      properties:
+        url:
+          type: string
+          format: uri
+          description: XHS post URL to crawl
+          example: https://www.xiaohongshu.com/explore/abc123
+
+    CrawlResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/CrawledContent'
+
+    CrawledContent:
+      type: object
+      required:
+        - title
+        - text
+        - media
+      properties:
+        title:
+          type: string
+          description: Post title or first line
+          example: "分享我的护肤心得"
+        text:
+          type: string
+          description: Full post text content
+          example: "今天来分享一下最近用的护肤品..."
+        authorName:
+          type: string
+          description: Original author's display name
+          example: "小红薯用户"
+        authorId:
+          type: string
+          description: Author's XHS user ID
+          example: "user123456"
+        originalDate:
+          type: string
+          format: date-time
+          description: Original post publication date
+          example: "2026-01-01T10:30:00Z"
+        viewCount:
+          type: integer
+          description: View count at crawl time
+          example: 15000
+        likeCount:
+          type: integer
+          description: Like count at crawl time
+          example: 500
+        media:
+          type: array
+          items:
+            $ref: '#/components/schemas/MediaItem'
+
+    MediaItem:
+      type: object
+      required:
+        - type
+        - url
+      properties:
+        type:
+          type: string
+          enum: [image, video]
+          description: Media type
+          example: image
+        url:
+          type: string
+          format: uri
+          description: Direct URL to media file
+          example: https://ci.xiaohongshu.com/abc123.jpg
+        width:
+          type: integer
+          description: Image/video width in pixels
+          example: 1080
+        height:
+          type: integer
+          description: Image/video height in pixels
+          example: 1920
+        fileSize:
+          type: integer
+          description: File size in bytes (if detectable)
+          example: 2048000
+
+    AnalyzeRequest:
+      type: object
+      required:
+        - text
+      properties:
+        text:
+          type: string
+          description: Post text content to analyze
+          example: "今天来分享一下最近用的护肤品，这款水乳真的很好用..."
+        title:
+          type: string
+          description: Post title for additional context
+          example: "分享我的护肤心得"
+        existingGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExistingGroup'
+          description: Existing groups for similarity matching
+
+    ExistingGroup:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: Group identifier
+          example: "group-123"
+        name:
+          type: string
+          description: Group name
+          example: "护肤美容"
+        description:
+          type: string
+          description: Group description
+          example: "护肤、美容、化妆相关内容"
+
+    AnalyzeResponse:
+      type: object
+      required:
+        - success
+        - data
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/AnalysisResult'
+
+    AnalysisResult:
+      type: object
+      required:
+        - labels
+        - summary
+        - modelVersion
+      properties:
+        labels:
+          type: array
+          items:
+            type: string
+          minItems: 3
+          maxItems: 5
+          description: Category labels for the post
+          example: ["护肤", "美容", "产品推荐", "日常分享"]
+        summary:
+          type: string
+          description: 2-3 sentence summary of post content
+          example: "作者分享了最近使用的护肤品心得，推荐了一款水乳产品。认为该产品性价比高，适合干皮使用。"
+        contentType:
+          type: string
+          enum: [tutorial, review, lifestyle, travel, food, fashion, other]
+          description: Primary content category
+          example: review
+        suggestedGroupId:
+          type: string
+          nullable: true
+          description: ID of suggested existing group, or null for new group
+          example: "group-123"
+        suggestedGroupName:
+          type: string
+          description: Suggested name if new group needed
+          example: "护肤心得"
+        modelVersion:
+          type: string
+          description: AI model version used for analysis
+          example: "claude-3-sonnet-20240229"
+
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          example: healthy
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-01-08T12:00:00Z"
+        version:
+          type: string
+          example: "1.0.0"
+        services:
+          type: object
+          properties:
+            puppeteer:
+              type: string
+              enum: [up, down]
+              example: up
+            aiApi:
+              type: string
+              enum: [up, down]
+              example: up
+
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - error
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: Error code for programmatic handling
+              example: INVALID_URL
+            message:
+              type: string
+              description: Human-readable error message
+              example: "The provided URL is not a valid Xiaohongshu post URL"
+            details:
+              type: object
+              description: Additional error context
+              additionalProperties: true
+
+tags:
+  - name: Crawling
+    description: XHS content extraction operations
+  - name: AI Analysis
+    description: AI-powered content analysis
+  - name: System
+    description: System health and status

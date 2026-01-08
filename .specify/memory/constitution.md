@@ -1,50 +1,117 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report:
+- Version change: [INITIAL] → 1.0.0
+- Modified principles: N/A (initial creation)
+- Added sections: All core principles, Mobile Architecture, Data & Privacy, Governance
+- Removed sections: N/A
+- Templates requiring updates:
+  ✅ .specify/templates/plan-template.md (reviewed, compatible)
+  ✅ .specify/templates/spec-template.md (reviewed, compatible)
+  ✅ .specify/templates/tasks-template.md (reviewed, compatible)
+- Follow-up TODOs: None
+-->
+
+# XHS AI Summary Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Cross-Platform First
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Every feature MUST work consistently across iOS and Android platforms. Platform-specific code MUST be isolated behind shared interfaces. The app uses a cross-platform framework (React Native, Flutter, or similar) to maximize code sharing while maintaining native performance for critical paths.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+**Rationale**: Resource efficiency and consistent user experience across platforms are essential for a personal utility app. Platform differences should be handled transparently without duplicating business logic.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### II. User Privacy & Data Isolation
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+User data MUST be stored in isolated, per-user containers. Content and AI analysis results MUST be accessible only to the owning user. No cross-user data sharing or aggregation without explicit consent. Local-first data storage with optional cloud sync.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+**Rationale**: Users share personal content from Xiao Hong Shu. Privacy and data isolation are non-negotiable for trust and compliance with data protection regulations.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### III. Offline-Capable Core
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+Core functionality (viewing saved content, accessing AI analysis results) MUST work offline. Content downloading and AI analysis can require connectivity but MUST handle network failures gracefully with retry mechanisms and clear user feedback.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+**Rationale**: Mobile users experience variable connectivity. Offline access to saved content ensures the app remains useful regardless of network conditions.
+
+### IV. AI Analysis Transparency
+
+AI analysis MUST provide clear, actionable insights. Analysis results MUST be versioned to support future model improvements. Users MUST be able to see what content was analyzed, when, and re-trigger analysis if needed.
+
+**Rationale**: AI outputs vary by model and prompt. Transparency and versioning allow users to understand and trust the analysis while supporting iterative improvements.
+
+### V. Simplicity & Performance
+
+Keep the feature set minimal and focused. Prioritize fast app launch, smooth scrolling, and responsive UI. Avoid complex abstractions unless clearly justified. Download and analysis operations MUST run in the background without blocking the UI.
+
+**Rationale**: Mobile users expect instant responsiveness. Background operations and simple architecture prevent performance bottlenecks that frustrate users.
+
+## Mobile Architecture
+
+### Platform Layer
+
+- Native platform code (iOS/Android) isolated in platform-specific modules
+- Shared business logic in cross-platform codebase
+- Platform adapters for file system, networking, background tasks
+- Native performance for media rendering and scrolling lists
+
+### Data Flow
+
+- Content URL → Download → Local Storage → AI Analysis → Results Storage
+- All operations asynchronous with progress tracking
+- Background task management for downloads and analysis
+- Offline queue for failed operations with automatic retry
+
+### Testing Requirements
+
+- Unit tests for business logic (content parsing, data models)
+- Integration tests for download → storage → analysis pipeline
+- Platform-specific UI tests for critical user journeys
+- Mock external dependencies (Xiao Hong Shu API, AI services)
+
+## Data & Privacy
+
+### Storage Strategy
+
+- SQLite or equivalent for structured data (content metadata, analysis results)
+- File system for downloaded media (images, videos)
+- Per-user database encryption at rest
+- Secure credential storage using platform keychains
+
+### Content Attribution
+
+- Preserve original author information from Xiao Hong Shu
+- Respect platform terms of service
+- Clear labeling of AI-generated analysis vs. original content
+- No redistribution or commercial use of downloaded content
+
+### Data Retention
+
+- Users control retention: ability to delete individual items or all data
+- Clear storage usage reporting
+- Optional automatic cleanup of old content
+- Export functionality for user data portability
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+### Amendment Process
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+1. Proposed changes documented with justification
+2. Impact assessment on existing features and architecture
+3. Team review and approval (or user approval for personal projects)
+4. Update all dependent templates and documentation
+5. Migration plan for any breaking changes
+
+### Constitution Compliance
+
+- All feature specifications MUST reference relevant principles
+- Implementation plans MUST include constitution check gate
+- Code reviews MUST verify adherence to privacy and offline requirements
+- Complexity additions MUST be justified against Principle V (Simplicity)
+
+### Versioning Policy
+
+- **MAJOR**: Changes to privacy model, platform support, or architectural principles
+- **MINOR**: New principle added or significant expansion of existing guidance
+- **PATCH**: Clarifications, wording improvements, non-semantic updates
+
+**Version**: 1.0.0 | **Ratified**: 2026-01-08 | **Last Amended**: 2026-01-08
