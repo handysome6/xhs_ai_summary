@@ -24,15 +24,15 @@
 
 **Purpose**: Project initialization and basic structure for both mobile app and backend API
 
-- [ ] T001 Create mobile project structure with Expo: `npx create-expo-app mobile --template expo-template-blank-typescript`
-- [ ] T002 Create API project structure: `mkdir api && cd api && npm init -y`
-- [ ] T003 [P] Configure mobile dependencies in mobile/package.json (expo-sqlite, expo-file-system, expo-task-manager, react-native-share-menu, axios, zustand)
-- [ ] T004 [P] Configure API dependencies in api/package.json (express, puppeteer, @anthropic-ai/sdk, dotenv, cors)
-- [ ] T005 [P] Configure TypeScript and ESLint for mobile in mobile/tsconfig.json and mobile/.eslintrc.js
-- [ ] T006 [P] Configure TypeScript and ESLint for API in api/tsconfig.json and api/.eslintrc.js
-- [ ] T007 [P] Create mobile environment config in mobile/.env and mobile/src/utils/constants.ts
-- [ ] T008 [P] Create API environment config in api/.env and api/src/config.ts
-- [ ] T009 Setup Expo Router file structure in mobile/app/_layout.tsx with tab navigation
+- [x] T001 Create mobile project structure with Expo: `npx create-expo-app mobile --template expo-template-blank-typescript`
+- [x] T002 Create API project structure: `mkdir api && cd api && npm init -y`
+- [x] T003 [P] Configure mobile dependencies in mobile/package.json (expo-sqlite, expo-file-system, expo-task-manager, react-native-share-menu, axios, zustand)
+- [x] T004 [P] Configure API dependencies in api/package.json (express, puppeteer, @anthropic-ai/sdk, dotenv, cors)
+- [x] T005 [P] Configure TypeScript and ESLint for mobile in mobile/tsconfig.json and mobile/.eslintrc.js
+- [x] T006 [P] Configure TypeScript and ESLint for API in api/tsconfig.json and api/.eslintrc.js
+- [x] T007 [P] Create mobile environment config in mobile/.env and mobile/src/utils/constants.ts
+- [x] T008 [P] Create API environment config in api/.env and api/src/config.ts
+- [x] T009 Setup Expo Router file structure in mobile/app/_layout.tsx with tab navigation
 
 **Checkpoint**: Both projects initialized with dependencies and configuration ready
 
@@ -46,26 +46,26 @@
 
 ### Mobile Foundation
 
-- [ ] T010 Create Post interface in mobile/src/models/post.ts
-- [ ] T011 [P] Create Content interface in mobile/src/models/content.ts
-- [ ] T012 [P] Create Media interface in mobile/src/models/media.ts
-- [ ] T013 [P] Create AIResult interface in mobile/src/models/ai-result.ts
-- [ ] T014 [P] Create Group interface in mobile/src/models/group.ts
-- [ ] T015 [P] Create DownloadTask interface in mobile/src/models/download-task.ts
-- [ ] T016 Create SQLite schema definitions in mobile/src/db/schema.ts (all tables: posts, content, media, ai_results, groups, download_tasks, posts_fts)
-- [ ] T017 Create database migrations in mobile/src/db/migrations.ts with version 1 initial schema
-- [ ] T018 Create repository base with database initialization in mobile/src/db/repository.ts
-- [ ] T018.5 Configure SQLite encryption using expo-secure-store for key management in mobile/src/db/encryption.ts (Constitution II compliance)
-- [ ] T019 [P] Create URL validator utility in mobile/src/utils/url-validator.ts (XHS URL patterns)
-- [ ] T020 [P] Create file manager utility in mobile/src/utils/file-manager.ts (paths, directories)
-- [ ] T021 Create API client service in mobile/src/services/api-client.ts (axios wrapper for backend)
+- [x] T010 Create Post interface in mobile/src/models/post.ts
+- [x] T011 [P] Create Content interface in mobile/src/models/content.ts
+- [x] T012 [P] Create Media interface in mobile/src/models/media.ts
+- [x] T013 [P] Create AIResult interface in mobile/src/models/ai-result.ts
+- [x] T014 [P] Create Group interface in mobile/src/models/group.ts
+- [x] T015 [P] Create DownloadTask interface in mobile/src/models/download-task.ts
+- [x] T016 Create SQLite schema definitions in mobile/src/db/schema.ts (all tables: posts, content, media, ai_results, groups, download_tasks, posts_fts)
+- [x] T017 Create database migrations in mobile/src/db/migrations.ts with version 1 initial schema
+- [x] T018 Create repository base with database initialization in mobile/src/db/repository.ts
+- [x] T018.5 Configure SQLite encryption using expo-secure-store for key management in mobile/src/db/encryption.ts (Constitution II compliance)
+- [x] T019 [P] Create URL validator utility in mobile/src/utils/url-validator.ts (XHS URL patterns)
+- [x] T020 [P] Create file manager utility in mobile/src/utils/file-manager.ts (paths, directories)
+- [x] T021 Create API client service in mobile/src/services/api-client.ts (axios wrapper for backend)
 
 ### API Foundation
 
-- [ ] T022 Create Express server entry point in api/src/index.ts with middleware setup
-- [ ] T023 [P] Create health check route in api/src/routes/health.ts (GET /api/v1/health)
-- [ ] T024 [P] Create error handling middleware in api/src/middleware/error-handler.ts
-- [ ] T025 [P] Create request validation middleware in api/src/middleware/validator.ts
+- [x] T022 Create Express server entry point in api/src/index.ts with middleware setup
+- [x] T023 [P] Create health check route in api/src/routes/health.ts (GET /api/v1/health)
+- [x] T024 [P] Create error handling middleware in api/src/middleware/error-handler.ts
+- [x] T025 [P] Create request validation middleware in api/src/middleware/validator.ts
 
 **Checkpoint**: Foundation ready - database schema, models, API server running - user story implementation can now begin
 
@@ -83,24 +83,24 @@
 
 - [ ] T026 [US1] Configure iOS Share Extension in mobile/ios/ (Info.plist, share extension target)
 - [ ] T027 [US1] Configure Android Intent Filter in mobile/android/app/src/main/AndroidManifest.xml
-- [ ] T028 [US1] Implement share handler service in mobile/src/services/share-handler.ts (receive URL, validate, create post)
-- [ ] T029 [US1] Add share intent listener in mobile/app/_layout.tsx (useEffect on app mount)
+- [x] T028 [US1] Implement share handler service in mobile/src/services/share-handler.ts (receive URL, validate, create post)
+- [x] T029 [US1] Add share intent listener in mobile/app/_layout.tsx (useEffect on app mount)
 
 #### Post Repository Operations
 
-- [ ] T030 [US1] Implement createPost() in mobile/src/db/repository.ts (insert with URL hash for dedup)
-- [ ] T031 [US1] Implement getPostByUrlHash() in mobile/src/db/repository.ts (duplicate detection)
-- [ ] T032 [US1] Implement getAllPosts() in mobile/src/db/repository.ts (ordered by created_at DESC)
-- [ ] T033 [US1] Implement deletePost() in mobile/src/db/repository.ts (cascade delete content, media)
+- [x] T030 [US1] Implement createPost() in mobile/src/db/repositories/post-repository.ts (insert with URL hash for dedup)
+- [x] T031 [US1] Implement getPostByUrlHash() in mobile/src/db/repositories/post-repository.ts (duplicate detection)
+- [x] T032 [US1] Implement getAllPosts() in mobile/src/db/repositories/post-repository.ts (ordered by created_at DESC)
+- [x] T033 [US1] Implement deletePost() in mobile/src/db/repositories/post-repository.ts (cascade delete content, media)
 
 #### UI Components
 
-- [ ] T034 [P] [US1] Create PostCard component in mobile/src/components/PostCard.tsx (URL, timestamp, status badge)
-- [ ] T035 [P] [US1] Create PostList component in mobile/src/components/PostList.tsx (FlatList with PostCard)
-- [ ] T036 [US1] Create usePosts hook in mobile/src/hooks/usePosts.ts (zustand store for posts state)
-- [ ] T037 [US1] Implement Home screen in mobile/app/(tabs)/index.tsx (PostList, empty state, pull-to-refresh)
-- [ ] T038 [US1] Add share confirmation toast/modal in mobile/src/components/ShareConfirmation.tsx
-- [ ] T039 [US1] Implement swipe-to-delete on PostCard in mobile/src/components/PostCard.tsx
+- [x] T034 [P] [US1] Create PostCard component in mobile/src/components/PostCard.tsx (URL, timestamp, status badge)
+- [x] T035 [P] [US1] Create PostList component in mobile/src/components/PostList.tsx (FlatList with PostCard)
+- [x] T036 [US1] Create usePosts hook in mobile/src/stores/post-store.ts (zustand store for posts state)
+- [x] T037 [US1] Implement Home screen in mobile/app/(tabs)/index.tsx (PostList, empty state, pull-to-refresh)
+- [x] T038 [US1] Add share confirmation toast/modal in mobile/src/components/ShareConfirmation.tsx
+- [x] T039 [US1] Implement swipe-to-delete on PostCard in mobile/src/components/PostCard.tsx
 
 **Checkpoint**: User Story 1 complete - users can share XHS links and view/delete posts in collection
 
@@ -114,35 +114,35 @@
 
 ### API Crawling Endpoint
 
-- [ ] T040 [US2] Implement XHS scraper service in api/src/services/xhs-scraper.ts (Puppeteer-based extraction)
-- [ ] T041 [US2] Implement crawl route in api/src/routes/crawl.ts (POST /api/v1/crawl per contract)
-- [ ] T042 [US2] Add URL validation and normalization in api/src/services/xhs-scraper.ts
-- [ ] T043 [US2] Handle XHS page variations and error cases in api/src/services/xhs-scraper.ts
+- [x] T040 [US2] Implement XHS scraper service in api/src/services/xhs-scraper.ts (Puppeteer-based extraction)
+- [x] T041 [US2] Implement crawl route in api/src/routes/crawl.ts (POST /api/v1/crawl per contract)
+- [x] T042 [US2] Add URL validation and normalization in api/src/services/xhs-scraper.ts
+- [x] T043 [US2] Handle XHS page variations and error cases in api/src/services/xhs-scraper.ts
 
 ### Mobile Download Manager
 
-- [ ] T044 [US2] Implement XHS crawler client in mobile/src/services/xhs-crawler.ts (calls API /crawl endpoint)
-- [ ] T045 [US2] Implement download manager in mobile/src/services/download-manager.ts (queue, progress, retry)
-- [ ] T046 [US2] Implement media download logic in mobile/src/services/download-manager.ts (images, videos with 100MB limit)
-- [ ] T047 [US2] Implement background task registration in mobile/src/services/download-manager.ts (expo-task-manager)
+- [x] T044 [US2] Implement XHS crawler client in mobile/src/services/xhs-crawler.ts (calls API /crawl endpoint)
+- [x] T045 [US2] Implement download manager in mobile/src/services/download-manager.ts (queue, progress, retry)
+- [x] T046 [US2] Implement media download logic in mobile/src/services/download-manager.ts (images, videos with 100MB limit)
+- [x] T047 [US2] Implement background task registration in mobile/src/services/download-manager.ts (expo-task-manager)
 
 ### Repository Extensions
 
-- [ ] T048 [US2] Implement createContent() in mobile/src/db/repository.ts
-- [ ] T049 [US2] Implement createMedia() in mobile/src/db/repository.ts
-- [ ] T050 [US2] Implement createDownloadTask() in mobile/src/db/repository.ts
-- [ ] T051 [US2] Implement updateDownloadTask() in mobile/src/db/repository.ts (status, progress, retry)
-- [ ] T052 [US2] Implement updatePostStatus() in mobile/src/db/repository.ts
-- [ ] T053 [US2] Implement getPostWithDetails() in mobile/src/db/repository.ts (joins content, media, ai_result)
+- [x] T048 [US2] Implement createContent() in mobile/src/db/repositories/content-repository.ts
+- [x] T049 [US2] Implement createMedia() in mobile/src/db/repositories/media-repository.ts
+- [x] T050 [US2] Implement createDownloadTask() in mobile/src/db/repositories/post-repository.ts
+- [x] T051 [US2] Implement updateDownloadTask() in mobile/src/db/repositories/post-repository.ts (status, progress, retry)
+- [x] T052 [US2] Implement updatePostStatus() in mobile/src/db/repositories/post-repository.ts
+- [x] T053 [US2] Implement getPostWithDetails() in mobile/src/db/repositories/post-repository.ts (joins content, media, ai_result)
 
 ### UI Components
 
-- [ ] T054 [P] [US2] Create DownloadProgress component in mobile/src/components/DownloadProgress.tsx (progress bar, status)
-- [ ] T055 [P] [US2] Create MediaViewer component in mobile/src/components/MediaViewer.tsx (image gallery, video player)
-- [ ] T056 [US2] Create useDownloadProgress hook in mobile/src/hooks/useDownloadProgress.ts
-- [ ] T057 [US2] Implement Post detail screen in mobile/app/post/[id].tsx (full content, media, download status)
-- [ ] T058 [US2] Add download status indicator to PostCard in mobile/src/components/PostCard.tsx
-- [ ] T059 [US2] Implement retry button for failed downloads in mobile/app/post/[id].tsx
+- [x] T054 [P] [US2] Create DownloadProgress component in mobile/src/components/DownloadProgress.tsx (progress bar, status)
+- [x] T055 [P] [US2] Create MediaViewer component in mobile/src/components/MediaViewer.tsx (image gallery, video player)
+- [x] T056 [US2] Create useDownloadProgress hook in mobile/src/services/download-manager.ts (addProgressListener)
+- [x] T057 [US2] Implement Post detail screen in mobile/app/post/[id].tsx (full content, media, download status)
+- [x] T058 [US2] Add download status indicator to PostCard in mobile/src/components/PostCard.tsx
+- [x] T059 [US2] Implement retry button for failed downloads in mobile/app/post/[id].tsx
 
 **Checkpoint**: User Story 2 complete - posts auto-download content, viewable offline with progress indicators
 
@@ -156,33 +156,33 @@
 
 ### API AI Analysis Endpoint
 
-- [ ] T060 [US3] Implement AI service in api/src/services/ai-service.ts (Claude API integration)
-- [ ] T061 [US3] Implement analyze route in api/src/routes/analyze.ts (POST /api/v1/analyze per contract)
-- [ ] T062 [US3] Create AI prompt templates in api/src/services/ai-service.ts (labels, summary, grouping)
-- [ ] T063 [US3] Handle AI API errors and rate limiting in api/src/services/ai-service.ts
+- [x] T060 [US3] Implement AI service in api/src/services/ai-analyzer.ts (Claude API integration)
+- [x] T061 [US3] Implement analyze route in api/src/routes/analyze.ts (POST /api/v1/analyze per contract)
+- [x] T062 [US3] Create AI prompt templates in api/src/services/ai-analyzer.ts (labels, summary, grouping)
+- [x] T063 [US3] Handle AI API errors and rate limiting in api/src/services/ai-analyzer.ts
 
 ### Mobile AI Analyzer
 
-- [ ] T064 [US3] Implement AI analyzer client in mobile/src/services/ai-analyzer.ts (calls API /analyze endpoint)
-- [ ] T065 [US3] Integrate AI analysis into download pipeline in mobile/src/services/download-manager.ts (trigger after content download)
-- [ ] T066 [US3] Implement group management logic in mobile/src/services/ai-analyzer.ts (create/assign groups)
+- [x] T064 [US3] Implement AI analyzer client in mobile/src/services/ai-analysis.ts (calls API /analyze endpoint)
+- [x] T065 [US3] Integrate AI analysis into download pipeline in mobile/src/services/download-manager.ts (trigger after content download)
+- [x] T066 [US3] Implement group management logic in mobile/src/services/ai-analysis.ts (create/assign groups)
 
 ### Repository Extensions
 
-- [ ] T067 [US3] Implement createAIResult() in mobile/src/db/repository.ts
-- [ ] T068 [US3] Implement createGroup() in mobile/src/db/repository.ts
-- [ ] T069 [US3] Implement getAllGroups() in mobile/src/db/repository.ts
-- [ ] T070 [US3] Implement getPostsByGroup() in mobile/src/db/repository.ts
-- [ ] T071 [US3] Implement updateGroupPostCount() in mobile/src/db/repository.ts
+- [x] T067 [US3] Implement createAIResult() in mobile/src/db/repositories/ai-result-repository.ts
+- [x] T068 [US3] Implement createGroup() in mobile/src/db/repositories/group-repository.ts
+- [x] T069 [US3] Implement getAllGroups() in mobile/src/db/repositories/group-repository.ts
+- [x] T070 [US3] Implement getPostsByGroup() in mobile/src/db/repositories/search-repository.ts (filterByGroup)
+- [x] T071 [US3] Implement updateGroupPostCount() in mobile/src/db/repositories/group-repository.ts
 
 ### UI Components
 
-- [ ] T072 [P] [US3] Create AIBadge component in mobile/src/components/AIBadge.tsx (visual indicator for AI content)
-- [ ] T073 [P] [US3] Create LabelChips component in mobile/src/components/LabelChips.tsx (display labels)
-- [ ] T074 [P] [US3] Create SummaryCard component in mobile/src/components/SummaryCard.tsx (AI summary display)
-- [ ] T075 [US3] Add AI labels and summary to Post detail screen in mobile/app/post/[id].tsx
-- [ ] T076 [US3] Add labels preview to PostCard in mobile/src/components/PostCard.tsx
-- [ ] T077 [US3] Implement Groups view in Home screen in mobile/app/(tabs)/index.tsx (toggle list/groups view)
+- [x] T072 [P] [US3] Create AIBadge component in mobile/src/components/AIBadge.tsx (visual indicator for AI content)
+- [x] T073 [P] [US3] Create LabelChips component in mobile/src/components/LabelChips.tsx (display labels)
+- [x] T074 [P] [US3] Create SummaryCard component in mobile/src/components/AISummary.tsx (AI summary display)
+- [x] T075 [US3] Add AI labels and summary to Post detail screen in mobile/app/post/[id].tsx
+- [x] T076 [US3] Add labels preview to PostCard in mobile/src/components/PostCard.tsx
+- [x] T077 [US3] Implement Groups view in Home screen in mobile/app/(tabs)/index.tsx (toggle list/groups view)
 
 **Checkpoint**: User Story 3 complete - posts have AI labels, summaries, and are automatically grouped
 
@@ -196,23 +196,23 @@
 
 ### Repository Extensions
 
-- [ ] T078 [US4] Implement searchPosts() in mobile/src/db/repository.ts (FTS5 full-text search)
-- [ ] T079 [US4] Implement getPostsByLabel() in mobile/src/db/repository.ts (JSON label matching)
-- [ ] T080 [US4] Implement getAllLabels() in mobile/src/db/repository.ts (distinct labels across posts)
+- [x] T078 [US4] Implement searchPosts() in mobile/src/db/repositories/search-repository.ts (FTS5 full-text search)
+- [x] T079 [US4] Implement getPostsByLabel() in mobile/src/db/repositories/search-repository.ts (filterByLabel)
+- [x] T080 [US4] Implement getAllLabels() in mobile/src/db/repositories/search-repository.ts (getSearchSuggestions)
 
 ### Search Service
 
-- [ ] T081 [US4] Implement search service in mobile/src/services/search-service.ts (search, filter, combine)
-- [ ] T082 [US4] Create useSearch hook in mobile/src/hooks/useSearch.ts (debounced search, filter state)
+- [x] T081 [US4] Implement search service in mobile/src/db/repositories/search-repository.ts (search, filter, combine)
+- [x] T082 [US4] Create useSearch hook in mobile/app/(tabs)/search.tsx (debounced search, filter state)
 
 ### UI Components
 
-- [ ] T083 [P] [US4] Create SearchBar component in mobile/src/components/SearchBar.tsx (text input, clear button)
-- [ ] T084 [P] [US4] Create LabelFilter component in mobile/src/components/LabelFilter.tsx (selectable label chips)
-- [ ] T085 [P] [US4] Create GroupSelector component in mobile/src/components/GroupSelector.tsx (group list)
-- [ ] T086 [US4] Implement Search screen in mobile/app/(tabs)/search.tsx (SearchBar, filters, results)
-- [ ] T087 [US4] Add search results highlighting in mobile/src/components/PostCard.tsx
-- [ ] T088 [US4] Implement filter persistence in useSearch hook in mobile/src/hooks/useSearch.ts
+- [x] T083 [P] [US4] Create SearchBar component in mobile/app/(tabs)/search.tsx (text input, clear button)
+- [x] T084 [P] [US4] Create LabelFilter component in mobile/app/(tabs)/search.tsx (selectable label chips)
+- [x] T085 [P] [US4] Create GroupSelector component in mobile/src/components/GroupSelector.tsx (group list)
+- [x] T086 [US4] Implement Search screen in mobile/app/(tabs)/search.tsx (SearchBar, filters, results)
+- [x] T087 [US4] Add search results highlighting in mobile/src/components/PostCard.tsx
+- [x] T088 [US4] Implement filter persistence in mobile/app/(tabs)/search.tsx (useState)
 
 **Checkpoint**: User Story 4 complete - users can search, filter by labels, browse by groups
 
@@ -222,13 +222,13 @@
 
 **Purpose**: Improvements that affect multiple user stories
 
-- [ ] T089 Implement Settings screen in mobile/app/(tabs)/settings.tsx (storage usage, clear data, about)
-- [ ] T090 [P] Add storage usage calculation in mobile/src/utils/file-manager.ts
+- [x] T089 Implement Settings screen in mobile/app/(tabs)/settings.tsx (storage usage, clear data, about)
+- [x] T090 [P] Add storage usage calculation in mobile/src/utils/file-manager.ts
 - [ ] T091 [P] Add network status monitoring in mobile/src/services/download-manager.ts (auto-retry on reconnect)
-- [ ] T092 Add error boundary and crash reporting in mobile/app/_layout.tsx
-- [ ] T093 [P] Add loading skeletons to PostList in mobile/src/components/PostList.tsx
+- [x] T092 Add error boundary and crash reporting in mobile/app/_layout.tsx
+- [x] T093 [P] Add loading skeletons to PostList in mobile/src/components/PostList.tsx
 - [ ] T094 [P] Add empty state illustrations to all screens
-- [ ] T095 Optimize list rendering with memo and virtualization in mobile/src/components/PostList.tsx
+- [x] T095 Optimize list rendering with memo and virtualization in mobile/src/components/PostList.tsx
 - [ ] T096 Add app icons and splash screen in mobile/assets/
 - [ ] T097 Run quickstart.md validation - verify full flow works end-to-end
 - [ ] T098 Performance profiling and optimization for 60fps scrolling
