@@ -4,6 +4,7 @@
 export * from './PostCard';
 export * from './PostList';
 export * from './ShareConfirmation';
+export * from './ClipboardPrompt';
 export * from './DownloadProgress';
 export * from './MediaViewer';
 export * from './LabelChips';

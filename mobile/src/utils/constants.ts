@@ -61,3 +61,14 @@ export const CONTENT_TYPE = {
   FASHION: 'fashion',
   OTHER: 'other',
 } as const;
+
+// Clipboard monitoring configuration
+export const CLIPBOARD_CONFIG = {
+  ENABLED: true,
+  DEBOUNCE_MS: 1000,
+  DEDUPLICATION_WINDOW_MS: 5 * 60 * 1000, // 5 minutes
+  PREVIEW_MAX_LENGTH: 100,
+  CLIPBOARD_READ_TIMEOUT_MS: 2000,
+  CLEANUP_INTERVAL_MS: 10 * 60 * 1000, // 10 minutes
+  HISTORY_RETENTION_DAYS: 30,
+} as const;

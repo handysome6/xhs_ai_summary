@@ -1,29 +1,61 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { StyleSheet, View, ActivityIndicator, Text, Linking } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Text, Linking, AppState, AppStateStatus } from 'react-native';
 import { getDatabase } from '../src/db/repository';
 import { runMigrations } from '../src/db/migrations';
 import { handleSharedUrl, ShareResult } from '../src/services/share-handler';
 import { usePostStore } from '../src/stores/post-store';
+import { useClipboardPrompt, useClipboardSaveResult } from '../src/stores/clipboard-store';
 import { ShareConfirmation } from '../src/components/ShareConfirmation';
+import { ClipboardPrompt } from '../src/components/ClipboardPrompt';
+import { checkClipboard, initializeClipboardMonitoring } from '../src/services/clipboard-monitor';
+import { initializeNetworkMonitoring } from '../src/services/network-monitor';
 
 export default function RootLayout() {
   const [isReady, setIsReady] = useState(false);
   const [initError, setInitError] = useState<string | null>(null);
   const [shareResult, setShareResult] = useState<ShareResult | null>(null);
   const addPost = usePostStore((state) => state.addPost);
+  const appState = useRef<AppStateStatus>(AppState.currentState);
 
-  // Initialize database
+  // Clipboard store hooks
+  const {
+    isVisible: isClipboardPromptVisible,
+    promptData,
+    handleAddToLibrary,
+    handleDismiss,
+    showPrompt,
+  } = useClipboardPrompt();
+
+  const { lastSaveResult, clearSaveResult } = useClipboardSaveResult();
+
+  // Initialize database and services
   useEffect(() => {
     async function initializeApp() {
       try {
+        // Initialize database
         const db = await getDatabase();
         await runMigrations(db);
+
+        // Initialize clipboard monitoring
+        initializeClipboardMonitoring();
+
+        // Initialize network monitoring
+        await initializeNetworkMonitoring();
+
         setIsReady(true);
+
+        // Check clipboard on app launch (cold start)
+        setTimeout(async () => {
+          const result = await checkClipboard();
+          if (result.shouldPrompt && result.url && result.urlHash) {
+            await showPrompt(result.url, result.urlHash);
+          }
+        }, 500); // Small delay to ensure UI is ready
       } catch (error) {
-        console.error('Failed to initialize database:', error);
+        console.error('Failed to initialize app:', error);
         setInitError(
           error instanceof Error ? error.message : 'Failed to initialize app'
         );
@@ -67,6 +99,37 @@ export default function RootLayout() {
     return () => subscription.remove();
   }, [handleUrl]);
 
+  // Listen for AppState changes (foreground detection)
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', async (nextAppState) => {
+      // Check if app is coming to foreground from background
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active' &&
+        isReady
+      ) {
+        // App has come to foreground - check clipboard
+        const result = await checkClipboard();
+        if (result.shouldPrompt && result.url && result.urlHash) {
+          await showPrompt(result.url, result.urlHash);
+        }
+      }
+
+      appState.current = nextAppState;
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [isReady, showPrompt]);
+
+  // Handle clipboard save result (add post to store if successful)
+  useEffect(() => {
+    if (lastSaveResult?.success && lastSaveResult.post && !lastSaveResult.isDuplicate) {
+      addPost(lastSaveResult.post);
+    }
+  }, [lastSaveResult, addPost]);
+
   // Show loading while initializing
   if (!isReady && !initError) {
     return (
@@ -104,6 +167,19 @@ export default function RootLayout() {
         result={shareResult}
         onDismiss={() => setShareResult(null)}
       />
+      <ShareConfirmation
+        result={lastSaveResult}
+        onDismiss={clearSaveResult}
+      />
+      {promptData && (
+        <ClipboardPrompt
+          visible={isClipboardPromptVisible}
+          url={promptData.url}
+          isOffline={promptData.isOffline}
+          onAdd={handleAddToLibrary}
+          onDismiss={handleDismiss}
+        />
+      )}
     </GestureHandlerRootView>
   );
 }

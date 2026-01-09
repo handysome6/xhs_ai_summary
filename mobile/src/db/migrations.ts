@@ -35,6 +35,45 @@ const MIGRATIONS: Migration[] = [
       DROP TABLE IF EXISTS schema_metadata;
     `,
   },
+  {
+    version: 2,
+    name: 'clipboard_monitoring',
+    up: `
+      -- Clipboard checks table: Analytics/debugging for clipboard monitoring events
+      CREATE TABLE IF NOT EXISTS clipboard_checks (
+        id TEXT PRIMARY KEY NOT NULL,
+        clipboard_content_hash TEXT,
+        clipboard_content_preview TEXT,
+        action_taken TEXT NOT NULL,
+        url_detected TEXT,
+        url_hash TEXT,
+        is_valid_url INTEGER NOT NULL DEFAULT 0,
+        created_at INTEGER NOT NULL
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_clipboard_checks_created ON clipboard_checks(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_clipboard_checks_action ON clipboard_checks(action_taken);
+      CREATE INDEX IF NOT EXISTS idx_clipboard_checks_url_hash ON clipboard_checks(url_hash);
+
+      -- Ignored URLs table: Deduplication tracking (5-minute window)
+      CREATE TABLE IF NOT EXISTS ignored_urls (
+        id TEXT PRIMARY KEY NOT NULL,
+        url TEXT NOT NULL,
+        url_hash TEXT NOT NULL UNIQUE,
+        action TEXT NOT NULL,
+        created_at INTEGER NOT NULL,
+        expires_at INTEGER NOT NULL
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_ignored_urls_hash ON ignored_urls(url_hash);
+      CREATE INDEX IF NOT EXISTS idx_ignored_urls_expires ON ignored_urls(expires_at);
+      CREATE INDEX IF NOT EXISTS idx_ignored_urls_action ON ignored_urls(action);
+    `,
+    down: `
+      DROP TABLE IF EXISTS ignored_urls;
+      DROP TABLE IF EXISTS clipboard_checks;
+    `,
+  },
 ];
 
 /**

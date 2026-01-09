@@ -6,3 +6,5 @@ export * from './share-handler';
 export * from './xhs-crawler';
 export * from './download-manager';
 export * from './ai-analysis';
+export * from './clipboard-monitor';
+export * from './network-monitor';

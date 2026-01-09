@@ -133,7 +133,7 @@ DROP TABLE IF EXISTS schema_metadata;
 /**
  * Current schema version
  */
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 /**
  * Table names as constants
@@ -147,6 +147,8 @@ export const TABLE_NAMES = {
   DOWNLOAD_TASKS: 'download_tasks',
   POSTS_FTS: 'posts_fts',
   SCHEMA_METADATA: 'schema_metadata',
+  CLIPBOARD_CHECKS: 'clipboard_checks',
+  IGNORED_URLS: 'ignored_urls',
 } as const;
 
 /**
@@ -208,5 +210,23 @@ export const COLUMN_MAPPINGS = {
     errorMessage: 'error_message',
     createdAt: 'created_at',
     updatedAt: 'updated_at',
+  },
+  clipboardChecks: {
+    id: 'id',
+    clipboardContentHash: 'clipboard_content_hash',
+    clipboardContentPreview: 'clipboard_content_preview',
+    actionTaken: 'action_taken',
+    urlDetected: 'url_detected',
+    urlHash: 'url_hash',
+    isValidUrl: 'is_valid_url',
+    createdAt: 'created_at',
+  },
+  ignoredUrls: {
+    id: 'id',
+    url: 'url',
+    urlHash: 'url_hash',
+    action: 'action',
+    createdAt: 'created_at',
+    expiresAt: 'expires_at',
   },
 } as const;
